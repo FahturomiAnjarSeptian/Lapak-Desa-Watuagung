@@ -109,7 +109,30 @@
     [data-bs-theme="dark"] .leaflet-marker-icon,
     [data-bs-theme="dark"] .leaflet-popup-content-wrapper,
     [data-bs-theme="dark"] .leaflet-popup-tip { filter: none !important; }
+    /* TAMBAHAN: Agar filter bisa di-scroll ke samping (seperti aplikasi GoFood/Shopee) */
+    #filterContainer {
+      display: flex;
+      flex-wrap: nowrap !important; /* Paksa agar TIDAK turun ke baris baru */
+      overflow-x: auto;             /* Aktifkan scroll samping */
+      gap: 10px;                    /* Jarak antar tombol */
+      padding-bottom: 10px;         /* Ruang untuk scroll */
+      justify-content: flex-start !important; /* Rata kiri agar urut dari awal */
+      
+      /* Sembunyikan scrollbar agar rapi */
+      scrollbar-width: none;        /* Firefox */
+      -ms-overflow-style: none;     /* IE/Edge */
+    }
 
+    /* Sembunyikan scrollbar di Chrome/Safari */
+    #filterContainer::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Agar tombol tidak gepeng/mengecil */
+    .filter-btn {
+      white-space: nowrap; 
+      flex-shrink: 0;
+    }
     @media (max-width: 768px) {
       .hero-content h1 { font-size: 2rem; }
       #map { height: 300px; }
