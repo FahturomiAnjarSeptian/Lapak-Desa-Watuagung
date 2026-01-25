@@ -355,7 +355,7 @@ function renderUI(data) {
     let fotoUrl = item.Foto_URL;
     if (fotoUrl && fotoUrl.includes('drive.google.com')) {
       const idMatch = fotoUrl.match(/\/d\/(.+?)(\/|$)/);
-      if (idMatch) fotoUrl = `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=800`;
+      if (idMatch) fotoUrl = `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=s2000`;
     }
 
     /* --- PERBAIKAN PENTING: No_Wa (kecil) sesuai CSV --- */
