@@ -67,6 +67,14 @@
     }
     .filter-btn.active, .filter-btn:hover { background: var(--emerald); color: white; }
 
+    /* Scrollable Filter */
+    #filterContainer {
+      display: flex; flex-wrap: nowrap !important; overflow-x: auto; gap: 10px; padding-bottom: 10px; justify-content: flex-start !important;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    #filterContainer::-webkit-scrollbar { display: none; }
+    .filter-btn { white-space: nowrap; flex-shrink: 0; }
+
     /* UMKM Card */
     .umkm-card { 
         border: 1px solid var(--border-color); 
@@ -109,30 +117,22 @@
     [data-bs-theme="dark"] .leaflet-marker-icon,
     [data-bs-theme="dark"] .leaflet-popup-content-wrapper,
     [data-bs-theme="dark"] .leaflet-popup-tip { filter: none !important; }
-    /* TAMBAHAN: Agar filter bisa di-scroll ke samping (seperti aplikasi GoFood/Shopee) */
-    #filterContainer {
-      display: flex;
-      flex-wrap: nowrap !important; /* Paksa agar TIDAK turun ke baris baru */
-      overflow-x: auto;             /* Aktifkan scroll samping */
-      gap: 10px;                    /* Jarak antar tombol */
-      padding-bottom: 10px;         /* Ruang untuk scroll */
-      justify-content: flex-start !important; /* Rata kiri agar urut dari awal */
-      
-      /* Sembunyikan scrollbar agar rapi */
-      scrollbar-width: none;        /* Firefox */
-      -ms-overflow-style: none;     /* IE/Edge */
+
+    /* SLIDER CUSTOM */
+    .carousel-item img {
+        height: 300px;
+        object-fit: contain;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+    }
+    [data-bs-theme="dark"] .carousel-item img { background-color: #2c2c2c; }
+    
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: rgba(0,0,0,0.5);
+        border-radius: 50%; padding: 10px;
     }
 
-    /* Sembunyikan scrollbar di Chrome/Safari */
-    #filterContainer::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Agar tombol tidak gepeng/mengecil */
-    .filter-btn {
-      white-space: nowrap; 
-      flex-shrink: 0;
-    }
     @media (max-width: 768px) {
       .hero-content h1 { font-size: 2rem; }
       #map { height: 300px; }
@@ -149,7 +149,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
   <div class="container">
     <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
-      <img src="https://drive.google.com/thumbnail?id=1QGmzIhjCJvDfIADZ_6RfWXUOStUSK4dg&sz=w200" alt="Logo Kabupaten Semarang">
+      <img src="https://drive.google.com/thumbnail?id=1QGmzIhjCJvDfIADZ_6RfWXUOStUSK4dg&sz=w1000" alt="Logo Kabupaten Semarang">
       LAPAK UMKM DESA WATUAGUNG
     </a>
     <div class="dark-toggle" onclick="toggleDarkMode()" title="Ubah Mode Tampilan">
@@ -207,8 +207,21 @@
         <h5 class="modal-title fw-bold" id="modalNama">Detail Produk</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
+      
       <div class="modal-body p-4">
-        <img id="modalFoto" src="" class="img-fluid rounded-4 mb-3 shadow-sm w-100" style="max-height:280px; object-fit: contain; background: #f8f9fa;">
+        
+        <div id="carouselProduk" class="carousel slide mb-3 shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
+            <div class="carousel-inner" id="modalCarouselInner"></div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduk" data-bs-slide="prev" id="btnPrev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselProduk" data-bs-slide="next" id="btnNext">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
         <div class="d-flex justify-content-between align-items-center mb-3">
             <span id="modalKategori" class="badge bg-success">Kategori</span>
             <span class="text-success fw-bold h5 mb-0" id="modalHarga"></span>
@@ -219,6 +232,7 @@
             <p class="mb-0"><strong><i class="bi bi-geo-alt text-success me-2"></i>Alamat:</strong> <span id="modalAlamat"></span></p>
         </div>
       </div>
+      
       <div class="modal-footer border-0 p-3 flex-column">
         <div class="d-flex gap-2 w-100 mb-2">
             <a id="modalWA" href="#" target="_blank" class="btn btn-success flex-fill py-2 fw-bold rounded-pill shadow-sm">
@@ -240,7 +254,7 @@
   <div class="container text-start">
     <div class="row g-4 justify-content-between">
       <div class="col-lg-5">
-        <img src="https://drive.google.com/thumbnail?id=1QGmzIhjCJvDfIADZ_6RfWXUOStUSK4dg&sz=w400" alt="Logo Kabupaten" class="footer-logo">
+        <img src="https://drive.google.com/thumbnail?id=1QGmzIhjCJvDfIADZ_6RfWXUOStUSK4dg&sz=w1000" alt="Logo Kabupaten" class="footer-logo">
         <h5 class="fw-bold mb-3">Pemerintah Desa Watuagung</h5>
         <p class="small opacity-75">Jl. Raya Watuagung - Salatiga KM 5, Desa Watuagung, Kec. Tuntang, Kab. Semarang, Jawa Tengah</p>
       </div>
@@ -258,7 +272,7 @@
             <a href="https://www.youtube.com/@pemdeswatuagung" target="_blank" class="text-white fs-4"><i class="bi bi-youtube"></i></a>
         </div>
         <p class="small mb-1 opacity-75">Dikembangkan oleh Fahturomi Anjar Septian</p>
-        <img src="https://drive.google.com/thumbnail?id=1kLMTTGJBuGID2XmM557jpR5wdUrheYKC&sz=w400" alt="Logo UNNES" class="unnes-logo">
+        <img src="https://drive.google.com/thumbnail?id=1kLMTTGJBuGID2XmM557jpR5wdUrheYKC&sz=w1000" alt="Logo UNNES" class="unnes-logo">
       </div>
     </div>
     <hr class="mt-5 opacity-25">
@@ -313,7 +327,6 @@ function toggleDarkMode() {
     }
 }
 
-/* Load Theme Preference */
 if (localStorage.getItem('theme') === 'dark' || (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
     document.body.setAttribute('data-bs-theme', 'dark');
     document.getElementById('darkModeIcon').className = 'bi bi-sun-fill';
@@ -352,15 +365,17 @@ function renderUI(data) {
 
   data.forEach((item, index) => {
     const originalIndex = allData.indexOf(item);
-    let fotoUrl = item.Foto_URL;
+    
+    // --- AMBIL GAMBAR PERTAMA UNTUK THUMBNAIL KARTU ---
+    let fotoUrl = item.Foto_URL ? item.Foto_URL.split(',')[0].trim() : ''; 
     if (fotoUrl && fotoUrl.includes('drive.google.com')) {
       const idMatch = fotoUrl.match(/\/d\/(.+?)(\/|$)/);
       if (idMatch) fotoUrl = `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=s2000`;
     }
 
-    /* --- PERBAIKAN PENTING: No_Wa (kecil) sesuai CSV --- */
     const rawWA = item.No_Wa ? item.No_Wa.toString().replace(/[^0-9]/g, '').replace(/^0/, '62') : '';
-    /* --- PERBAIKAN RUTE: Menggunakan Link Standar Google Maps --- */
+    
+    // --- LINK RUTE GOOGLE MAPS YANG BENAR ---
     const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${item.Latitude},${item.Longitude}`;
 
     const col = document.createElement('div');
@@ -402,18 +417,43 @@ function bukaDetail(index) {
     document.getElementById('modalHarga').innerText = item.Harga || 'Harga Bersaing';
     document.getElementById('modalAlamat').innerText = item.Alamat || 'Desa Watuagung';
     
-    // Perbaikan Link Rute di Modal
+    // --- LINK RUTE DI MODAL ---
     const startRoute = `https://www.google.com/maps/dir/?api=1&destination=${item.Latitude},${item.Longitude}`;
     document.getElementById('modalRoute').href = startRoute;
 
-    let fotoUrl = item.Foto_URL;
-    if (fotoUrl && fotoUrl.includes('drive.google.com')) {
-      const idMatch = fotoUrl.match(/\/d\/(.+?)(\/|$)/);
-      if (idMatch) fotoUrl = `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=800`;
-    }
-    document.getElementById('modalFoto').src = fotoUrl || 'https://via.placeholder.com/400x300';
+    // --- LOGIKA SLIDER (CAROUSEL) ---
+    const carouselInner = document.getElementById('modalCarouselInner');
+    carouselInner.innerHTML = ''; 
+    let rawImages = item.Foto_URL ? item.Foto_URL.split(',') : [];
     
-    // --- PERBAIKAN PENTING: No_Wa (kecil) di Modal ---
+    if (rawImages.length === 0 || (rawImages.length === 1 && rawImages[0].trim() === '')) {
+        rawImages = ['https://via.placeholder.com/400x300'];
+    }
+
+    rawImages.forEach((url, i) => {
+        let cleanUrl = url.trim();
+        if (cleanUrl.includes('drive.google.com')) {
+          const idMatch = cleanUrl.match(/\/d\/(.+?)(\/|$)/);
+          if (idMatch) cleanUrl = `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=s2000`;
+        }
+        
+        const activeClass = i === 0 ? 'active' : '';
+        const slideItem = document.createElement('div');
+        slideItem.className = `carousel-item ${activeClass}`;
+        slideItem.innerHTML = `<img src="${cleanUrl}" class="d-block w-100" alt="Foto ${i+1}">`;
+        carouselInner.appendChild(slideItem);
+    });
+
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    if (rawImages.length > 1) {
+        btnPrev.style.display = 'block';
+        btnNext.style.display = 'block';
+    } else {
+        btnPrev.style.display = 'none';
+        btnNext.style.display = 'none';
+    }
+
     const cleanWA = item.No_Wa ? item.No_Wa.toString().replace(/[^0-9]/g, '').replace(/^0/, '62') : '';
     document.getElementById('modalWA').href = `https://wa.me/${cleanWA}`;
 
