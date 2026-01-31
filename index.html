@@ -142,6 +142,21 @@
       .unnes-logo { height: 50px; }
       .social-icons { justify-content: center; display: flex; margin-bottom: 20px; }
     }
+    @media (max-width: 768px) {
+      .umkm-card .card-body {
+        padding: 10px; /* Perkecil padding dalam kartu di HP */
+      }
+      .umkm-card h6 {
+        font-size: 0.85rem; /* Perkecil font judul agar tidak turun baris berlebihan */
+      }
+      .card-img-wrapper {
+        height: 140px; /* Sesuaikan tinggi gambar agar tetap proporsional */
+      }
+      .price-tag {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+      }
+    }
   </style>
 </head>
 <body data-bs-theme="light">
@@ -379,7 +394,9 @@ function renderUI(data) {
     const mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${item.Latitude},${item.Longitude}`;
 
     const col = document.createElement('div');
-    col.className = "col-lg-6 col-12 mb-2"; 
+    /* col-6 artinya bagi 2 di HP (total grid 12) */
+    /* g-2 di HP agar jarak antar kartu tidak terlalu jauh */
+    col.className = "col-lg-6 col-6 mb-2 px-1";
     
     col.innerHTML = `
       <div class="card umkm-card shadow-sm h-100 mx-auto" id="card-${originalIndex}">
